@@ -237,6 +237,39 @@ Balance Breakdown:
 - Verification status
 - Last backup time
 
+### 10. View System Configuration
+**Command:** `10`
+
+**Purpose:** Display all system configuration settings
+
+**Output:**
+```
+Bank CLI Configuration
+======================
+
+OVERDRAFT FEE TIERS:
+  Tier 1 ($0.01 - $100.00):     $25.00
+  Tier 2 ($100.01 - $500.00):   $35.00
+  Tier 3 ($500.01 - $1,000.00): $50.00
+  Tier 4 ($1,000.01+):          $75.00
+
+ACCOUNT DEFAULTS:
+  Max Balance:        $1,000,000.00
+  Max Transaction:    $10,000.00
+  Overdraft Limit:    $1,000.00
+  Overdraft Enabled:  false
+
+SYSTEM LIMITS:
+  Max Accounts:       10,000
+  Max History/Account: 100,000 transactions
+```
+
+**Example:**
+```
+> 10
+[Configuration display shown above]
+```
+
 ### 0. Exit
 **Command:** `0`
 
@@ -267,6 +300,17 @@ Maximum overdraft limit: $1,000.00 (configurable)
 ./data/bank_accounts.json - Account data
 ./data/backups/ - Automatic backups
 ./logs/ - Activity and error logs
+```
+
+### Viewing Current Configuration
+
+You can view all system settings at any time:
+```bash
+# From CLI
+> 10
+
+# Configuration is centralized in src/Configuration.dfy
+# All values can be reviewed there
 ```
 
 ## Verification Properties
