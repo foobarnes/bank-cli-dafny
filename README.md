@@ -451,14 +451,21 @@ dafny test tests/BankTests.dfy
 
 ### Adding New Features
 
-See SPEC.md and docs/REQUIREMENTS_AND_EDGE_CASES.md for detailed specifications.
+See SPEC.md for the specification index and docs/README.md for complete documentation navigation.
 
 ## Documentation
 
-- **SPEC.md** - Complete technical specification
-- **docs/REQUIREMENTS_AND_EDGE_CASES.md** - Exhaustive edge case catalog
-- **docs/AI_ASSISTED_GUIDE.md** - AI-assisted development guide
-- **CLAUDE.md** - Development environment setup
+**Quick Start:**
+- **docs/README.md** - 📚 Documentation hub and navigation guide
+- **SPEC.md** - Technical specification index with links to all specs
+
+**For Developers:**
+- **docs/specs/** - Detailed specifications (Architecture, Data Models, Verification, etc.)
+- **docs/guides/REQUIREMENTS_AND_EDGE_CASES.md** - Exhaustive edge case catalog
+- **docs/guides/AI_ASSISTED_GUIDE.md** - AI-assisted development guide
+- **CLAUDE.md** - Development workflow guide
+
+See [docs/README.md](docs/README.md) for complete documentation navigation.
 
 ## Requirements
 

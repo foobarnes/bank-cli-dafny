@@ -83,11 +83,28 @@ dafny test tests/BankTests.dfy
 
 ### Documentation
 
+**Quick Navigation:**
+- **docs/README.md** - 📚 Documentation hub (start here for navigation)
 - **README.md** - User guide and installation
-- **SPEC.md** - Complete technical specification
-- **docs/REQUIREMENTS_AND_EDGE_CASES.md** - Edge case catalog
-- **docs/AI_ASSISTED_GUIDE.md** - AI-assisted development
-- **CLAUDE.md** - This file (development guide)
+- **SPEC.md** - Specification index with links to all specs
+
+**Detailed Specifications** (docs/specs/):
+- **ARCHITECTURE.md** - System design, modules, FFI, data flow
+- **DATA_MODELS.md** - Datatypes and configurations
+- **VERIFICATION_SPEC.md** - Invariants, proofs, verification requirements
+- **FUNCTIONAL_REQUIREMENTS.md** - Feature specifications (FR-1 to FR-10)
+- **ERROR_HANDLING.md** - Error categories, codes, recovery strategies
+- **UI_SPECIFICATION.md** - CLI design and interaction flows
+- **TESTING_SPEC.md** - Testing strategy and test suites
+- **PERFORMANCE_AND_SECURITY.md** - Performance targets and security measures
+- **REFERENCE.md** - Glossary, constants, error codes, JSON schema
+
+**Development Guides** (docs/guides/):
+- **AI_ASSISTED_GUIDE.md** - AI-assisted development workflows
+- **REQUIREMENTS_AND_EDGE_CASES.md** - Edge case catalog and requirements
+
+**Quick Reference:**
+- **CLAUDE.md** - This file (development guide for Claude Code)
 
 ### Development Workflow
 
@@ -98,7 +115,7 @@ When working on new features or fixes:
 3. **Implement with verification in mind** - Write code that Dafny can verify
 4. **Run verification** - Use `dafny verify` on affected modules
 5. **Update documentation** - Keep specs and guides current
-6. **Test edge cases** - Reference docs/REQUIREMENTS_AND_EDGE_CASES.md for known scenarios
+6. **Test edge cases** - Reference docs/guides/REQUIREMENTS_AND_EDGE_CASES.md for known scenarios
 
 ### Common Verification Patterns
 
@@ -127,8 +144,12 @@ method {:extern} ReadLine() returns (line: string)
 
 ### Notes for AI-Assisted Development
 
-- Use docs/AI_ASSISTED_GUIDE.md for Claude-assisted feature development
+- **Context-efficient documentation**: Use docs/README.md to navigate and load only relevant specs for each task
+- Use docs/guides/AI_ASSISTED_GUIDE.md for Claude-assisted feature development workflows
 - All fee calculations must be mathematically proven in OverdraftPolicy.dfy
 - Balance integrity is a critical invariant - verify after any transaction changes
 - FFI calls to C# are unchecked - wrap with validation in Dafny
-- Refer to SPEC.md for complete system architecture and data models
+- Refer to SPEC.md for specification index, then load specific docs/specs/ files as needed
+- For architecture: docs/specs/ARCHITECTURE.md
+- For datatypes: docs/specs/DATA_MODELS.md
+- For verification: docs/specs/VERIFICATION_SPEC.md

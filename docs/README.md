@@ -28,6 +28,10 @@ User-facing documentation and quick reference materials.
 **Learn about data structures**
 - Go to: [`specs/DATA_MODELS.md`](specs/DATA_MODELS.md)
 
+**View or modify system configuration**
+- See: [`specs/CONFIGURATION.md`](specs/CONFIGURATION.md)
+- Quick ref: Fee tiers, account limits, system settings
+
 **Work with formal verification**
 - Read: [`specs/VERIFICATION_SPEC.md`](specs/VERIFICATION_SPEC.md)
 - Use AI assistance: [`guides/AI_ASSISTED_GUIDE.md`](guides/AI_ASSISTED_GUIDE.md)
@@ -75,6 +79,7 @@ User-facing documentation and quick reference materials.
 | File | Description | Key Sections | Size |
 |------|-------------|--------------|------|
 | [`ARCHITECTURE.md`](specs/ARCHITECTURE.md) | System design, modules, FFI, data flow | System overview, module structure, FFI layer, build system | ~700 lines |
+| [`CONFIGURATION.md`](specs/CONFIGURATION.md) | Centralized system configuration | Overdraft fees, account limits, system settings, modification guide | ~450 lines |
 | [`DATA_MODELS.md`](specs/DATA_MODELS.md) | All datatypes and configurations | Transaction, Account, Bank, Result, Option, defaults | ~386 lines |
 | [`VERIFICATION_SPEC.md`](specs/VERIFICATION_SPEC.md) | Formal verification requirements | 8 core invariants, preconditions, postconditions, proofs | ~639 lines |
 | [`FUNCTIONAL_REQUIREMENTS.md`](specs/FUNCTIONAL_REQUIREMENTS.md) | Feature specifications (FR-1 to FR-10) | Account management, transactions, queries, configuration | ~453 lines |
@@ -104,6 +109,7 @@ User-facing documentation and quick reference materials.
 4. [`../CLAUDE.md`](../CLAUDE.md) - Development workflow
 
 **Reference Material:**
+- [`specs/CONFIGURATION.md`](specs/CONFIGURATION.md) - For system settings and fee tiers
 - [`specs/DATA_MODELS.md`](specs/DATA_MODELS.md) - When working with datatypes
 - [`specs/ERROR_HANDLING.md`](specs/ERROR_HANDLING.md) - When handling errors
 - [`specs/REFERENCE.md`](specs/REFERENCE.md) - For constants and codes
@@ -195,6 +201,7 @@ When updating documentation:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.1 | 2025-10-30 | Added CONFIGURATION.md spec for centralized configuration management |
 | 2.0 | 2025-10-30 | Reorganized into modular specs/ and guides/ structure |
 | 1.0 | 2025-10-XX | Initial monolithic SPEC.md |
 
