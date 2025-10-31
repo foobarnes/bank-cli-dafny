@@ -39,12 +39,7 @@ module Account {
     else history[0].amount + ComputeBalanceFromHistory(history[1..])
   }
 
-  // Helper function to compute total fees from transaction history
-  function TotalFees(history: seq<Transaction>): int
-  {
-    if |history| == 0 then 0
-    else history[0].fee + TotalFees(history[1..])
-  }
+  // Note: TotalFees function is provided by Transaction module (imported above)
 
   // Account validity invariant
   // Ensures all account state constraints are satisfied

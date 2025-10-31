@@ -121,10 +121,10 @@ module Bank {
   /*
    * AccountExists checks if an account ID is present in the bank.
    */
-  method AccountExists(bank: Bank, id: nat) returns (exists: bool)
-    ensures exists <==> id in bank.accounts
+  method AccountExists(bank: Bank, id: nat) returns (accountExists: bool)
+    ensures accountExists <==> id in bank.accounts
   {
-    exists := id in bank.accounts;
+    accountExists := id in bank.accounts;
   }
 
   /*
