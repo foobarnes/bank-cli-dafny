@@ -71,11 +71,13 @@ dotnet build bank-cli.csproj
 
 **Run application:**
 ```bash
-# Build and run
-make run
+# Simplest - use wrapper script
+./bank-cli
 
-# Run if already built
-make run-quick
+# Or with Makefile
+make run        # Build and run
+make dev        # Verify, build, and run
+make run-quick  # Run without rebuilding
 
 # Or directly
 ./.build/bin/Debug/net8.0/bank-cli
