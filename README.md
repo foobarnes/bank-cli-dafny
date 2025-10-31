@@ -31,7 +31,21 @@ A comprehensive educational project demonstrating formal verification techniques
 
 **macOS:**
 ```bash
+# Install .NET 8 via Homebrew
+brew install dotnet@8
+
+# Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+
+# Apply the changes
+source ~/.zshrc  # or source ~/.bash_profile
+
+# Install Dafny
 brew install dafny
+
+# Verify .NET installation
+dotnet --version
+# Expected: 8.0.x
 ```
 
 **Linux (Ubuntu/Debian):**
@@ -48,7 +62,10 @@ dotnet tool install --global dafny
 
 **Windows:**
 ```powershell
-# Using .NET tool
+# Install .NET SDK
+winget install Microsoft.DotNet.SDK.8
+
+# Using .NET tool to install Dafny
 dotnet tool install --global dafny
 ```
 
@@ -56,6 +73,9 @@ dotnet tool install --global dafny
 ```bash
 dafny --version
 # Expected: Dafny 4.11.0 or higher
+
+dotnet --version
+# Expected: 8.0.x or higher
 ```
 
 ## Building
@@ -67,19 +87,31 @@ dafny verify src/Main.dfy
 
 ### Build Executable
 ```bash
-dafny build src/Main.dfy --output:bank-cli
+dafny build src/Main.dfy --output:bank-cli --allow-warnings
 ```
 
 ### Run the Application
+
+**Option 1: Using dotnet (recommended):**
+```bash
+dotnet bank-cli.dll
+```
+
+**Option 2: Using standalone executable (requires .NET in PATH):**
 ```bash
 ./bank-cli
+```
+
+**Note:** If you encounter a "Failed to resolve libhostfxr.dylib" error, ensure .NET is in your PATH:
+```bash
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
 ```
 
 ## Quick Start
 
 ```bash
 # 1. Start the application
-./bank-cli
+dotnet bank-cli.dll
 
 # 2. Create your first account (option 1)
 Account ID: 1001

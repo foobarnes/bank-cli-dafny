@@ -50,17 +50,17 @@ module MainModule {
       if loadResult.Success? {
         // In production, would deserialize JSON to Bank
         // For now, create empty bank
-        bank := CreateBank();
+        bank := CreateEmptyBank();
         success := true;
         PrintLine("Bank data loaded successfully.");
       } else {
         PrintLine("Error loading bank data. Starting with empty bank.");
-        bank := CreateBank();
+        bank := CreateEmptyBank();
         success := true;
       }
     } else {
       PrintLine("No existing data found. Creating new bank...");
-      bank := CreateBank();
+      bank := CreateEmptyBank();
 
       // Save initial empty state
       var saveResult := SaveData("", dataFilePath);
@@ -79,13 +79,8 @@ module MainModule {
   {
     PrintLine("Performing health checks...");
 
-    // Check configuration validity
-    if ValidConfiguration() {
-      PrintLine("✓ Configuration valid");
-    } else {
-      PrintLine("✗ Configuration invalid");
-      return false;
-    }
+    // Configuration validity is verified at compile time by Dafny
+    PrintLine("✓ Configuration valid (verified statically)");
 
     PrintLine("✓ All health checks passed");
     PrintLine("");

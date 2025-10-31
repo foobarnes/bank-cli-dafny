@@ -236,14 +236,14 @@ module Bank {
     var depositTx := Transaction(
       txId,
       accountId,
-      T.Deposit,
+      TransactionType.Deposit,
       amount,
       description,
       timestamp,
       account.balance,
       newBalance,
-      T.Completed,
-      T.None,
+      TransactionStatus.Completed,
+      Option.None,
       []
     );
 
