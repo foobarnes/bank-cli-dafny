@@ -78,40 +78,54 @@ dotnet --version
 # Expected: 8.0.x or higher
 ```
 
-## Building
+## Quick Start
 
-### Verify Dafny Code
+### First Time Setup
 ```bash
-dafny verify src/Main.dfy
+# Install dependencies (macOS)
+brew install dafny dotnet@8
+
+# Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+
+# Build the project
+make build
 ```
 
-### Build Executable
-```bash
-dafny build src/Main.dfy --output:bank-cli --allow-warnings
-```
+### Running the Application
 
-### Run the Application
-
-**Option 1: Using dotnet (recommended):**
-```bash
-dotnet bank-cli.dll
-```
-
-**Option 2: Using standalone executable (requires .NET in PATH):**
+**Simple command (recommended for users):**
 ```bash
 ./bank-cli
 ```
 
-**Note:** If you encounter a "Failed to resolve libhostfxr.dylib" error, ensure .NET is in your PATH:
+**Developer workflow:**
 ```bash
-export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+make dev        # Verify + build + run (full workflow)
+make run        # Build + run (skip verification)
+make run-quick  # Run without rebuilding
 ```
 
-## Quick Start
+**Direct execution:**
+```bash
+./.build/bin/Debug/net8.0/bank-cli
+```
+
+### Building
+
+```bash
+make build      # Build executable
+make verify     # Verify Dafny code only
+make clean      # Remove all build artifacts
+```
+
+See `make help` for all available commands.
+
+## Usage Example
 
 ```bash
 # 1. Start the application
-dotnet bank-cli.dll
+./bank-cli
 
 # 2. Create your first account (option 1)
 Account ID: 1001
