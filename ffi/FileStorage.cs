@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Dafny;
 
 public class FileStorage {
@@ -12,8 +13,8 @@ public class FileStorage {
     ISequence<Rune> filePath
   ) {
     try {
-      string path = filePath.ToString();
-      string data = jsonData.ToString();
+      string path = RuneSequenceToString(filePath);
+      string data = RuneSequenceToString(jsonData);
 
       // Create backup if file exists
       if (File.Exists(path)) {
@@ -58,7 +59,7 @@ public class FileStorage {
     ISequence<Rune> filePath
   ) {
     try {
-      string path = filePath.ToString();
+      string path = RuneSequenceToString(filePath);
 
       if (!File.Exists(path)) {
         return Persistence.PersistenceResult<ISequence<Rune>>.create_FileNotFound(filePath);
@@ -91,7 +92,7 @@ public class FileStorage {
     ISequence<Rune> filePath
   ) {
     try {
-      string path = filePath.ToString();
+      string path = RuneSequenceToString(filePath);
 
       if (!File.Exists(path)) {
         // No file to backup, return success
@@ -132,13 +133,24 @@ public class FileStorage {
   /// </summary>
   public static bool FileExists(ISequence<Rune> filePath) {
     try {
-      string path = filePath.ToString();
+      string path = RuneSequenceToString(filePath);
       return File.Exists(path);
     }
     catch {
       // Return false for any errors (permission issues, etc.)
       return false;
     }
+  }
+
+  /// <summary>
+  /// Helper method to convert Dafny Rune sequence to C# string
+  /// </summary>
+  private static string RuneSequenceToString(ISequence<Rune> runes) {
+    var sb = new StringBuilder();
+    foreach (var rune in runes.Elements) {
+      sb.Append((char)rune.Value);
+    }
+    return sb.ToString();
   }
 
   /// <summary>
