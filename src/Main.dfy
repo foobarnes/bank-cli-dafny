@@ -34,6 +34,7 @@ module MainModule {
   // ============================================================================
 
   method Initialize(dataFilePath: string) returns (bank: Bank, success: bool)
+    ensures success ==> ValidBank(bank)
   {
     PrintLine("========================================");
     PrintLine("   VERIFIED BANK CLI - INITIALIZING");
@@ -116,6 +117,7 @@ module MainModule {
   // ============================================================================
 
   method {:main} Main()
+    decreases *  // Allow potentially non-terminating (calls RunCLI)
   {
     var dataFilePath := "bank_data.json";
 
@@ -134,6 +136,9 @@ module MainModule {
       PrintLine("Health checks failed. Exiting.");
       return;
     }
+
+    // Assert bank validity before calling RunCLI
+    assert ValidBank(bank);
 
     // Run CLI
     PrintLine("Starting CLI...");
