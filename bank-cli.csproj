@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>bank-cli</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>CS8600;CS8603;CS8604;CS8605;CS8625;CS8629;CS8714;CS8765;CS8769;CS8981</NoWarn>
+    <Nullable>enable</Nullable>
+    <RollForward>Major</RollForward>
+
+    <!-- Build artifacts organization (BaseOutputPath and BaseIntermediateOutputPath set in Directory.Build.props) -->
+    <PublishDir>.build/publish/</PublishDir>
+  </PropertyGroup>
+  <ItemGroup>
+      <!-- Generated Dafny C# code -->
+      <Compile Include=".build/dafny/csharp/bank-cli.cs" />
+
+      <!-- FFI C# implementations -->
+      <Compile Include="ffi/IO.cs" />
+      <Compile Include="ffi/FileStorage.cs" />
+      <Compile Include="ffi/StringHelpers.cs" />
+
+      <!-- NuGet dependencies -->
+      <PackageReference Include="DafnyRuntime" Version="4.9.2" />
+      <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
+      <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
+  </ItemGroup>
+</Project>

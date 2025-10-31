@@ -58,7 +58,7 @@ module Persistence {
    *
    * The actual implementation is in ffi/FileStorage.cs
    */
-  method {:extern "FileStorage", "SaveData"} SaveData(jsonData: string, filePath: string)
+  method {:extern "FileStorage", "SaveData"} {:axiom} SaveData(jsonData: string, filePath: string)
     returns (result: PersistenceResult<Unit>)
     ensures result.Success? ==> result.value == Unit
 
@@ -87,7 +87,7 @@ module Persistence {
    *
    * The actual implementation is in ffi/FileStorage.cs
    */
-  method {:extern "FileStorage", "CreateBackup"} CreateBackup(filePath: string)
+  method {:extern "FileStorage", "CreateBackup"} {:axiom} CreateBackup(filePath: string)
     returns (result: PersistenceResult<Unit>)
     ensures result.Success? ==> result.value == Unit
 

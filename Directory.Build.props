@@ -1,0 +1,10 @@
+<Project>
+  <!--
+    Build artifact organization - must be set before Microsoft.Common.props
+    See: https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory
+  -->
+  <PropertyGroup>
+    <BaseOutputPath>.build/bin/</BaseOutputPath>
+    <BaseIntermediateOutputPath>.build/obj/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

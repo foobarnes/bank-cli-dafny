@@ -62,7 +62,7 @@ module CLI {
    * Returns (success, value) tuple.
    * Implementation in ffi/StringHelpers.cs
    */
-  method {:extern "StringHelpers", "TryParseNat"} TryParseNat(str: string) returns (success: bool, value: nat)
+  method {:extern "StringHelpers", "TryParseNat"} {:axiom} TryParseNat(str: string) returns (success: bool, value: nat)
 
   /*
    * TryParseInt attempts to parse a string as an integer.
@@ -165,7 +165,7 @@ module CLI {
   // MAIN CLI LOOP
   // ============================================================================
 
-  method {:verify false} RunCLI(initialBank: Bank, dataFilePath: string)
+  method {:verify false} {:axiom} RunCLI(initialBank: Bank, dataFilePath: string)
     requires ValidBank(initialBank)
     decreases *  // Allow potentially non-terminating (user-driven loop)
   {
@@ -304,7 +304,7 @@ module CLI {
             PrintLine("Error: Amount must be positive");
           } else {
             // Assume ValidBank for CLI operations - Bank methods maintain this invariant
-            assume ValidBank(currentBank);
+            assume {:axiom} ValidBank(currentBank);
             var updatedBank, success, errorMsg := Deposit(
               currentBank,
               accountId,
@@ -346,7 +346,7 @@ module CLI {
           } else if amount <= 0 {
             PrintLine("Error: Amount must be positive");
           } else {
-            assume ValidBank(currentBank);
+            assume {:axiom} ValidBank(currentBank);
             var updatedBank, success, errorMsg, feeCharged := Withdraw(
               currentBank,
               accountId,
@@ -403,7 +403,7 @@ module CLI {
             } else if amount <= 0 {
               PrintLine("Error: Amount must be positive");
             } else {
-              assume ValidBank(currentBank);
+              assume {:axiom} ValidBank(currentBank);
               var updatedBank, success, errorMsg := Transfer(
                 currentBank,
                 fromId,

@@ -9,8 +9,8 @@ public class FileStorage {
   /// Saves JSON data to a file
   /// </summary>
   public static Persistence._IPersistenceResult<Persistence._IUnit> SaveData(
-    ISequence<Rune> jsonData,
-    ISequence<Rune> filePath
+    ISequence<Dafny.Rune> jsonData,
+    ISequence<Dafny.Rune> filePath
   ) {
     try {
       string path = RuneSequenceToString(filePath);
@@ -42,12 +42,12 @@ public class FileStorage {
     }
     catch (IOException ex) {
       return Persistence.PersistenceResult<Persistence._IUnit>.create_IOError(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
     catch (Exception ex) {
       return Persistence.PersistenceResult<Persistence._IUnit>.create_IOError(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
   }
@@ -55,32 +55,32 @@ public class FileStorage {
   /// <summary>
   /// Loads JSON data from a file
   /// </summary>
-  public static Persistence._IPersistenceResult<ISequence<Rune>> LoadData(
-    ISequence<Rune> filePath
+  public static Persistence._IPersistenceResult<ISequence<Dafny.Rune>> LoadData(
+    ISequence<Dafny.Rune> filePath
   ) {
     try {
       string path = RuneSequenceToString(filePath);
 
       if (!File.Exists(path)) {
-        return Persistence.PersistenceResult<ISequence<Rune>>.create_FileNotFound(filePath);
+        return Persistence.PersistenceResult<ISequence<Dafny.Rune>>.create_FileNotFound(filePath);
       }
 
       string data = File.ReadAllText(path);
-      return Persistence.PersistenceResult<ISequence<Rune>>.create_Success(
-        Sequence<Rune>.UnicodeFromString(data)
+      return Persistence.PersistenceResult<ISequence<Dafny.Rune>>.create_Success(
+        Sequence<Dafny.Rune>.UnicodeFromString(data)
       );
     }
     catch (UnauthorizedAccessException) {
-      return Persistence.PersistenceResult<ISequence<Rune>>.create_PermissionDenied(filePath);
+      return Persistence.PersistenceResult<ISequence<Dafny.Rune>>.create_PermissionDenied(filePath);
     }
     catch (IOException ex) {
-      return Persistence.PersistenceResult<ISequence<Rune>>.create_IOError(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+      return Persistence.PersistenceResult<ISequence<Dafny.Rune>>.create_IOError(
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
     catch (Exception ex) {
-      return Persistence.PersistenceResult<ISequence<Rune>>.create_CorruptedData(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+      return Persistence.PersistenceResult<ISequence<Dafny.Rune>>.create_CorruptedData(
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
   }
@@ -89,7 +89,7 @@ public class FileStorage {
   /// Creates a timestamped backup of a file
   /// </summary>
   public static Persistence._IPersistenceResult<Persistence._IUnit> CreateBackup(
-    ISequence<Rune> filePath
+    ISequence<Dafny.Rune> filePath
   ) {
     try {
       string path = RuneSequenceToString(filePath);
@@ -118,12 +118,12 @@ public class FileStorage {
     }
     catch (IOException ex) {
       return Persistence.PersistenceResult<Persistence._IUnit>.create_IOError(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
     catch (Exception ex) {
       return Persistence.PersistenceResult<Persistence._IUnit>.create_IOError(
-        Sequence<Rune>.UnicodeFromString(ex.Message)
+        Sequence<Dafny.Rune>.UnicodeFromString(ex.Message)
       );
     }
   }
@@ -131,7 +131,7 @@ public class FileStorage {
   /// <summary>
   /// Checks if a file exists
   /// </summary>
-  public static bool FileExists(ISequence<Rune> filePath) {
+  public static bool FileExists(ISequence<Dafny.Rune> filePath) {
     try {
       string path = RuneSequenceToString(filePath);
       return File.Exists(path);
@@ -145,7 +145,7 @@ public class FileStorage {
   /// <summary>
   /// Helper method to convert Dafny Rune sequence to C# string
   /// </summary>
-  private static string RuneSequenceToString(ISequence<Rune> runes) {
+  private static string RuneSequenceToString(ISequence<Dafny.Rune> runes) {
     var sb = new StringBuilder();
     foreach (var rune in runes.Elements) {
       sb.Append((char)rune.Value);
