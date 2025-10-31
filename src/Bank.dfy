@@ -236,14 +236,14 @@ module Bank {
     var depositTx := Transaction(
       txId,
       accountId,
-      Deposit,
+      T.Deposit,
       amount,
       description,
       timestamp,
       account.balance,
       newBalance,
-      Completed,
-      None,
+      T.Completed,
+      T.None,
       []
     );
 
@@ -588,7 +588,7 @@ module Bank {
    * NatToString converts a natural number to string.
    * In production, this would be implemented via FFI.
    */
-  function method NatToString(n: nat): string
+  function NatToString(n: nat): string
   {
     // Placeholder implementation for verification
     "ID"
