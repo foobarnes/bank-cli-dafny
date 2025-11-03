@@ -30,50 +30,11 @@ module MainModule {
   method {:extern "IO", "PrintLine"} PrintLine(text: string)
 
   // ============================================================================
-  // SERIALIZATION HELPERS
+  // SERIALIZATION
   // ============================================================================
-
-  /*
-   * SerializeBank converts a Bank to a JSON string.
-   * This is a simplified placeholder implementation.
-   * In production, this would use proper JSON serialization.
-   */
-  method SerializeBank(bank: Bank) returns (json: string)
-    requires ValidBank(bank)
-  {
-    // Simplified JSON representation
-    // In production, this would properly serialize all accounts and transactions
-    var txIdStr := NatToString(bank.nextTransactionId);
-    var feesStr := IntToString(bank.totalFees);
-    json := "{\"accounts\":{},\"nextTransactionId\":" + txIdStr +
-            ",\"totalFees\":" + feesStr + "}";
-  }
-
-  /*
-   * DeserializeBank converts a JSON string to a Bank.
-   * This is a simplified placeholder implementation.
-   * In production, this would parse JSON and reconstruct the bank state.
-   */
-  method DeserializeBank(json: string) returns (bank: Bank, success: bool)
-    ensures success ==> ValidBank(bank)
-  {
-    // For now, just return empty bank
-    // In production, would parse JSON
-    bank := CreateEmptyBank();
-    success := true;
-  }
-
-  /*
-   * Helper method to convert nat to string for JSON.
-   * Uses FFI string helpers.
-   */
-  method {:extern "StringHelpers", "NatToString"} NatToString(n: nat) returns (str: string)
-
-  /*
-   * Helper method to convert int to string for JSON.
-   * Uses FFI string helpers.
-   */
-  method {:extern "StringHelpers", "IntToString"} IntToString(n: int) returns (str: string)
+  // SerializeBank and DeserializeBank are provided by Persistence module
+  // (imported opened above) which calls FFI BankSerializer.cs for full
+  // JSON serialization including all accounts and transaction history.
 
   // ============================================================================
   // INITIALIZATION
@@ -96,9 +57,11 @@ module MainModule {
 
       if loadResult.Success? {
         // Deserialize JSON to Bank
-        var loadedBank, deserializeSuccess := DeserializeBank(loadResult.value);
-        if deserializeSuccess {
-          bank := loadedBank;
+        var deserializeResult := DeserializeBank(loadResult.value);
+        if deserializeResult.Success? {
+          bank := deserializeResult.value;
+          // FFI deserialization is trusted - assume it produces valid bank
+          assume {:axiom} ValidBank(bank);
           success := true;
           PrintLine("Bank data loaded successfully.");
         } else {

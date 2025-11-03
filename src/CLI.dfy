@@ -176,9 +176,8 @@ module CLI {
   method AutoSaveBank(bank: Bank, dataFilePath: string)
     requires ValidBank(bank)
   {
-    // Simplified JSON serialization
-    // In production, this would properly serialize all accounts and transactions
-    var json := "{\"accounts\":{},\"nextTransactionId\":0,\"totalFees\":0}";
+    // Serialize bank to JSON
+    var json := SerializeBank(bank);
     var saveResult := SaveData(json, dataFilePath);
 
     if !saveResult.Success? {
@@ -190,7 +189,7 @@ module CLI {
   // MAIN CLI LOOP
   // ============================================================================
 
-  method {:verify false} {:axiom} RunCLI(initialBank: Bank, dataFilePath: string) returns (finalBank: Bank)
+  method {:axiom} RunCLI(initialBank: Bank, dataFilePath: string) returns (finalBank: Bank)
     requires ValidBank(initialBank)
     ensures ValidBank(finalBank)
     decreases *  // Allow potentially non-terminating (user-driven loop)

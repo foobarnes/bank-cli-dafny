@@ -169,21 +169,21 @@ public class BankSerializer
             if (accounts == null)
                 accounts = Map<BigInteger, Account._IAccount>.Empty;
 
-            return new Bank.Bank(accounts, nextTransactionId, totalFees);
+            return new Bank._Bank(accounts, nextTransactionId, totalFees);
         }
 
         public override void Write(Utf8JsonWriter writer, Bank._IBank value, JsonSerializerOptions options)
         {
-            var bank = (Bank.Bank)value;
+            var bank = (Bank._Bank)value;
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("accounts");
             var mapConverter = new DafnyMapConverter();
-            mapConverter.Write(writer, bank.accounts, options);
+            mapConverter.Write(writer, bank._accounts, options);
 
-            writer.WriteNumber("nextTransactionId", (long)bank.nextTransactionId);
-            writer.WriteNumber("totalFees", (long)bank.totalFees);
+            writer.WriteNumber("nextTransactionId", (long)bank._nextTransactionId);
+            writer.WriteNumber("totalFees", (long)bank._totalFees);
 
             writer.WriteEndObject();
         }
@@ -262,7 +262,7 @@ public class BankSerializer
                 }
             }
 
-            return new Account.Account(
+            return new Account._Account(
                 id,
                 Sequence<Dafny.Rune>.UnicodeFromString(owner),
                 balance,
@@ -279,28 +279,28 @@ public class BankSerializer
 
         public override void Write(Utf8JsonWriter writer, Account._IAccount value, JsonSerializerOptions options)
         {
-            var account = (Account.Account)value;
+            var account = (Account._Account)value;
 
             writer.WriteStartObject();
-            writer.WriteNumber("id", (long)account.id);
-            writer.WriteString("owner", RuneSequenceToString(account.owner));
-            writer.WriteNumber("balance", (long)account.balance);
+            writer.WriteNumber("id", (long)account._id);
+            writer.WriteString("owner", RuneSequenceToString(account._owner));
+            writer.WriteNumber("balance", (long)account._balance);
 
             writer.WritePropertyName("history");
             var seqConverter = new DafnySequenceConverter();
-            seqConverter.Write(writer, account.history, options);
+            seqConverter.Write(writer, account._history, options);
 
-            writer.WriteBoolean("overdraftEnabled", account.overdraftEnabled);
-            writer.WriteNumber("overdraftLimit", (long)account.overdraftLimit);
-            writer.WriteNumber("maxBalance", (long)account.maxBalance);
-            writer.WriteNumber("maxTransaction", (long)account.maxTransaction);
-            writer.WriteNumber("totalFeesCollected", (long)account.totalFeesCollected);
+            writer.WriteBoolean("overdraftEnabled", account._overdraftEnabled);
+            writer.WriteNumber("overdraftLimit", (long)account._overdraftLimit);
+            writer.WriteNumber("maxBalance", (long)account._maxBalance);
+            writer.WriteNumber("maxTransaction", (long)account._maxTransaction);
+            writer.WriteNumber("totalFeesCollected", (long)account._totalFeesCollected);
 
             writer.WritePropertyName("status");
             var statusConverter = new AccountStatusConverter();
-            statusConverter.Write(writer, account.status, options);
+            statusConverter.Write(writer, account._status, options);
 
-            writer.WriteNumber("createdAt", (long)account.createdAt);
+            writer.WriteNumber("createdAt", (long)account._createdAt);
             writer.WriteEndObject();
         }
     }
@@ -379,7 +379,7 @@ public class BankSerializer
                 }
             }
 
-            return new Transaction.Transaction(
+            return new Transaction._Transaction(
                 Sequence<Dafny.Rune>.UnicodeFromString(id),
                 accountId,
                 txType,
@@ -396,32 +396,32 @@ public class BankSerializer
 
         public override void Write(Utf8JsonWriter writer, Transaction._ITransaction value, JsonSerializerOptions options)
         {
-            var tx = (Transaction.Transaction)value;
+            var tx = (Transaction._Transaction)value;
 
             writer.WriteStartObject();
-            writer.WriteString("id", RuneSequenceToString(tx.id));
-            writer.WriteNumber("accountId", (long)tx.accountId);
+            writer.WriteString("id", RuneSequenceToString(tx._id));
+            writer.WriteNumber("accountId", (long)tx._accountId);
 
             writer.WritePropertyName("txType");
             var txTypeConverter = new TransactionTypeConverter();
-            txTypeConverter.Write(writer, tx.txType, options);
+            txTypeConverter.Write(writer, tx._txType, options);
 
-            writer.WriteNumber("amount", (long)tx.amount);
-            writer.WriteString("description", RuneSequenceToString(tx.description));
-            writer.WriteNumber("timestamp", (long)tx.timestamp);
-            writer.WriteNumber("balanceBefore", (long)tx.balanceBefore);
-            writer.WriteNumber("balanceAfter", (long)tx.balanceAfter);
+            writer.WriteNumber("amount", (long)tx._amount);
+            writer.WriteString("description", RuneSequenceToString(tx._description));
+            writer.WriteNumber("timestamp", (long)tx._timestamp);
+            writer.WriteNumber("balanceBefore", (long)tx._balanceBefore);
+            writer.WriteNumber("balanceAfter", (long)tx._balanceAfter);
 
             writer.WritePropertyName("status");
             var statusConverter = new TransactionStatusConverter();
-            statusConverter.Write(writer, tx.status, options);
+            statusConverter.Write(writer, tx._status, options);
 
             writer.WritePropertyName("parentTxId");
             var optionConverter = new OptionConverter();
-            optionConverter.Write(writer, tx.parentTxId, options);
+            optionConverter.Write(writer, tx._parentTxId, options);
 
             writer.WritePropertyName("childTxIds");
-            WriteStringSequence(writer, tx.childTxIds);
+            WriteStringSequence(writer, tx._childTxIds);
 
             writer.WriteEndObject();
         }
