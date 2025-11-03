@@ -112,7 +112,6 @@ bank-cli*.dll
 # Project-specific data/artifacts
 data/backup/
 data/*.bak
-.project-artifacts/
 
 # User data files (should not be committed)
 bank_data.json
