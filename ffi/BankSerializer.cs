@@ -97,6 +97,9 @@ public class BankSerializer
                 new BankConverter(),
                 new AccountConverter(),
                 new TransactionConverter(),
+                new FeeCategoryConverter(),
+                new TierChargeConverter(),
+                new FeeDetailsConverter(),
                 new TransactionTypeConverter(),
                 new AccountStatusConverter(),
                 new TransactionStatusConverter(),
@@ -469,6 +472,8 @@ public class BankSerializer
                 throw new JsonException("Expected StartObject token");
 
             string tag = null;
+            Transaction._IFeeCategory category = null;
+            Transaction._IFeeDetails details = null;
 
             while (reader.Read())
             {
@@ -480,11 +485,20 @@ public class BankSerializer
                     string propertyName = reader.GetString();
                     reader.Read();
 
-                    if (propertyName == "tag")
+                    switch (propertyName)
                     {
-                        tag = reader.GetString();
+                        case "tag":
+                            tag = reader.GetString();
+                            break;
+                        case "category":
+                            var categoryConverter = new FeeCategoryConverter();
+                            category = categoryConverter.Read(ref reader, typeof(Transaction._IFeeCategory), options);
+                            break;
+                        case "details":
+                            var detailsConverter = new FeeDetailsConverter();
+                            details = detailsConverter.Read(ref reader, typeof(Transaction._IFeeDetails), options);
+                            break;
                     }
-                    // TODO: Handle Fee details when needed
                 }
             }
 
@@ -494,6 +508,14 @@ public class BankSerializer
                 "Withdrawal" => Transaction.TransactionType.create_Withdrawal(),
                 "TransferIn" => Transaction.TransactionType.create_TransferIn(),
                 "TransferOut" => Transaction.TransactionType.create_TransferOut(),
+                "Fee" => Transaction.TransactionType.create_Fee(
+                    category ?? Transaction.FeeCategory.create_OverdraftFee(),
+                    details ?? new Transaction.FeeDetails(
+                        Sequence<Transaction._ITierCharge>.Empty,
+                        BigInteger.Zero,
+                        Sequence<Dafny.Rune>.UnicodeFromString("")
+                    )
+                ),
                 "Interest" => Transaction.TransactionType.create_Interest(),
                 "Adjustment" => Transaction.TransactionType.create_Adjustment(),
                 _ => Transaction.TransactionType.create_Deposit() // Default fallback
@@ -519,7 +541,14 @@ public class BankSerializer
             else if (value.is_Fee)
             {
                 writer.WriteString("tag", "Fee");
-                // TODO: Write fee details when needed
+
+                writer.WritePropertyName("category");
+                var categoryConverter = new FeeCategoryConverter();
+                categoryConverter.Write(writer, value.dtor_category, options);
+
+                writer.WritePropertyName("details");
+                var detailsConverter = new FeeDetailsConverter();
+                detailsConverter.Write(writer, value.dtor_details, options);
             }
 
             writer.WriteEndObject();
@@ -582,6 +611,169 @@ public class BankSerializer
                 writer.WriteStringValue("Failed");
             else if (value.is_RolledBack)
                 writer.WriteStringValue("RolledBack");
+        }
+    }
+
+    /// <summary>
+    /// Converter for FeeCategory enum
+    /// </summary>
+    private class FeeCategoryConverter : JsonConverter<Transaction._IFeeCategory>
+    {
+        public override Transaction._IFeeCategory Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            string value = reader.GetString();
+            return value switch
+            {
+                "OverdraftFee" => Transaction.FeeCategory.create_OverdraftFee(),
+                "MaintenanceFee" => Transaction.FeeCategory.create_MaintenanceFee(),
+                "TransferFee" => Transaction.FeeCategory.create_TransferFee(),
+                "ATMFee" => Transaction.FeeCategory.create_ATMFee(),
+                "InsufficientFundsFee" => Transaction.FeeCategory.create_InsufficientFundsFee(),
+                _ => Transaction.FeeCategory.create_OverdraftFee()
+            };
+        }
+
+        public override void Write(Utf8JsonWriter writer, Transaction._IFeeCategory value, JsonSerializerOptions options)
+        {
+            if (value.is_OverdraftFee)
+                writer.WriteStringValue("OverdraftFee");
+            else if (value.is_MaintenanceFee)
+                writer.WriteStringValue("MaintenanceFee");
+            else if (value.is_TransferFee)
+                writer.WriteStringValue("TransferFee");
+            else if (value.is_ATMFee)
+                writer.WriteStringValue("ATMFee");
+            else if (value.is_InsufficientFundsFee)
+                writer.WriteStringValue("InsufficientFundsFee");
+        }
+    }
+
+    /// <summary>
+    /// Converter for TierCharge datatype
+    /// </summary>
+    private class TierChargeConverter : JsonConverter<Transaction._ITierCharge>
+    {
+        public override Transaction._ITierCharge Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+                throw new JsonException("Expected StartObject token");
+
+            BigInteger tier = BigInteger.Zero;
+            BigInteger rangeStart = BigInteger.Zero;
+            BigInteger rangeEnd = BigInteger.Zero;
+            BigInteger applicableAmount = BigInteger.Zero;
+            BigInteger feeRate = BigInteger.Zero;
+            BigInteger charge = BigInteger.Zero;
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                    break;
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                    throw new JsonException("Expected PropertyName token");
+
+                string propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "tier":
+                        tier = new BigInteger(reader.GetInt64());
+                        break;
+                    case "rangeStart":
+                        rangeStart = new BigInteger(reader.GetInt64());
+                        break;
+                    case "rangeEnd":
+                        rangeEnd = new BigInteger(reader.GetInt64());
+                        break;
+                    case "applicableAmount":
+                        applicableAmount = new BigInteger(reader.GetInt64());
+                        break;
+                    case "feeRate":
+                        feeRate = new BigInteger(reader.GetInt64());
+                        break;
+                    case "charge":
+                        charge = new BigInteger(reader.GetInt64());
+                        break;
+                }
+            }
+
+            return new Transaction.TierCharge(tier, rangeStart, rangeEnd, applicableAmount, feeRate, charge);
+        }
+
+        public override void Write(Utf8JsonWriter writer, Transaction._ITierCharge value, JsonSerializerOptions options)
+        {
+            var tierCharge = (Transaction.TierCharge)value;
+
+            writer.WriteStartObject();
+            writer.WriteNumber("tier", (long)tierCharge._tier);
+            writer.WriteNumber("rangeStart", (long)tierCharge._rangeStart);
+            writer.WriteNumber("rangeEnd", (long)tierCharge._rangeEnd);
+            writer.WriteNumber("applicableAmount", (long)tierCharge._applicableAmount);
+            writer.WriteNumber("feeRate", (long)tierCharge._feeRate);
+            writer.WriteNumber("charge", (long)tierCharge._charge);
+            writer.WriteEndObject();
+        }
+    }
+
+    /// <summary>
+    /// Converter for FeeDetails datatype
+    /// </summary>
+    private class FeeDetailsConverter : JsonConverter<Transaction._IFeeDetails>
+    {
+        public override Transaction._IFeeDetails Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+                throw new JsonException("Expected StartObject token");
+
+            ISequence<Transaction._ITierCharge> tierBreakdown = Sequence<Transaction._ITierCharge>.Empty;
+            BigInteger baseAmount = BigInteger.Zero;
+            string calculationNote = "";
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                    break;
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                    throw new JsonException("Expected PropertyName token");
+
+                string propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "tierBreakdown":
+                        var seqConverter = new DafnySequenceConverter();
+                        tierBreakdown = (ISequence<Transaction._ITierCharge>)seqConverter.Read(ref reader, typeof(ISequence<Transaction._ITierCharge>), options);
+                        break;
+                    case "baseAmount":
+                        baseAmount = new BigInteger(reader.GetInt64());
+                        break;
+                    case "calculationNote":
+                        calculationNote = reader.GetString() ?? "";
+                        break;
+                }
+            }
+
+            return new Transaction.FeeDetails(tierBreakdown, baseAmount, Sequence<Dafny.Rune>.UnicodeFromString(calculationNote));
+        }
+
+        public override void Write(Utf8JsonWriter writer, Transaction._IFeeDetails value, JsonSerializerOptions options)
+        {
+            var feeDetails = (Transaction.FeeDetails)value;
+
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("tierBreakdown");
+            var seqConverter = new DafnySequenceConverter();
+            seqConverter.Write(writer, feeDetails._tierBreakdown, options);
+
+            writer.WriteNumber("baseAmount", (long)feeDetails._baseAmount);
+            writer.WriteString("calculationNote", RuneSequenceToString(feeDetails._calculationNote));
+
+            writer.WriteEndObject();
         }
     }
 
