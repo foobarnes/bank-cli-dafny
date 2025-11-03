@@ -1,104 +1,99 @@
-# Bank CLI - A Formally Verified Banking System in Dafny
+# Bank CLI - A Formally Verified Banking System in [Dafny](https://dafny.org)
 
-A comprehensive educational project demonstrating formal verification techniques applied to a real-world banking system. This CLI application showcases how Dafny's verification capabilities ensure correctness properties like balance integrity, fund conservation, and transaction atomicity.
+A comprehensive educational project demonstrating formal verification techniques applied to a real-world banking system. This CLI application showcases how [Dafny](https://dafny.org)'s verification capabilities ensure correctness properties like balance integrity, fund conservation, and transaction atomicity.
 
 ## Features
 
 ### Core Banking Operations
-- ✅ Account creation and management with unique identifiers
-- ✅ Deposit operations with balance validation
-- ✅ Withdrawal operations with overdraft protection
-- ✅ Transfer operations between accounts with atomic guarantees
-- ✅ Balance inquiries with real-time accuracy
+- 💳 Account creation and management with unique identifiers
+- 📥 Deposit operations with balance validation
+- 📤 Withdrawal operations with [overdraft protection](https://en.wikipedia.org/wiki/Overdraft)
+- 🔄 Transfer operations between accounts with [atomic](https://en.wikipedia.org/wiki/Atomicity_(database_systems)) guarantees
+- 💰 Balance inquiries with real-time accuracy
 
 ### Advanced Features
-- ✅ Transaction history tracking with filtering capabilities
-- ✅ Tiered overdraft protection system (4 configurable tiers)
-- ✅ File-based persistence with automatic backup
-- ✅ Interactive command-line interface with FFI for input
-- ✅ Comprehensive error handling with actionable messages
+- 📜 Transaction history tracking with filtering capabilities
+- 📊 Tiered [overdraft protection](https://en.wikipedia.org/wiki/Overdraft) system (4 configurable tiers)
+- 💾 [File-based persistence](https://en.wikipedia.org/wiki/Persistence_(computer_science)) with automatic backup
+- 🖥️ Interactive [command-line interface](https://en.wikipedia.org/wiki/Command-line_interface) with [FFI](https://en.wikipedia.org/wiki/Foreign_function_interface) for input
+- ⚠️ Comprehensive error handling with actionable messages
 
-### Formal Verification
-- ✅ Balance integrity proofs
-- ✅ Fee monotonicity guarantees
-- ✅ Fund conservation across transfers
-- ✅ Transaction completeness verification
-- ✅ Atomicity of multi-step operations
+### Formal Verification (powered by [Dafny](https://dafny.org))
+- ✓ Balance integrity proofs
+- 📈 Fee [monotonicity](https://en.wikipedia.org/wiki/Monotonic_function) guarantees
+- ⚖️ [Fund conservation](https://en.wikipedia.org/wiki/Conservation_law) across transfers
+- 📋 Transaction completeness verification
+- 🔒 [Atomicity](https://en.wikipedia.org/wiki/Atomicity_(database_systems)) of multi-step operations
+
+## Prerequisites
+
+**Required:**
+- macOS 11+ (Big Sur or higher)
+- .NET 9.0 runtime or higher
+- Dafny 4.11.0 or higher
 
 ## Installation
 
-### Install Dafny
-
-**macOS:**
+### Step 1: Install .NET Runtime
 ```bash
 # Install .NET 9 via Homebrew
 brew install dotnet@9
+```
 
-# Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
+### Step 2: Configure Environment
+Add .NET to your PATH by adding this line to `~/.zshrc` (or `~/.bash_profile` for bash):
+```bash
 export PATH="/opt/homebrew/opt/dotnet@9/bin:$PATH"
+```
 
-# Apply the changes
-source ~/.zshrc  # or source ~/.bash_profile
+Apply the changes:
+```bash
+source ~/.zshrc  # or source ~/.bash_profile for bash
+```
 
-# Install Dafny
+### Step 3: Install Dafny
+```bash
 brew install dafny
-
-# Verify .NET installation
-dotnet --version
-# Expected: 9.0.x
 ```
 
-### Verify Installation
+### Step 4: Verify Installation
 ```bash
-dafny --version
-# Expected: Dafny 4.11.0 or higher
-
-dotnet --version
-# Expected: 9.0.x or higher
+dafny --version  # Expected: Dafny 4.11.0 or higher
+dotnet --version # Expected: 9.0.x or higher
 ```
 
-## Quick Start
+## Getting Started
 
-### First Time Setup
+### Build the Project
+First, build the executable (required before first run):
 ```bash
-# Install dependencies (macOS)
-brew install dafny dotnet@9
-
-# Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
-export PATH="/opt/homebrew/opt/dotnet@9/bin:$PATH"
-
-# Build the project
 make build
 ```
 
-### Running the Application
+This compiles the Dafny code and creates the executable in `.build/bin/Debug/net9.0/`.
 
-**Simple command (recommended for users):**
+### Run the Application
 ```bash
 ./bank-cli
 ```
 
-**Developer workflow:**
-```bash
-make dev        # Verify + build + run (full workflow)
-make run        # Build + run (skip verification)
-make run-quick  # Run without rebuilding
-```
+The interactive menu will guide you through creating accounts and performing banking operations.
 
-**Direct execution:**
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `make build` | Build the executable |
+| `make run` | Build and run the application |
+| `make dev` | Verify Dafny code, build, and run (full workflow) |
+| `make verify` | Verify Dafny code only (no build) |
+| `make clean` | Remove all build artifacts |
+| `make help` | Show all available commands |
+
+**Direct execution:** You can also run the built executable directly:
 ```bash
 ./.build/bin/Debug/net9.0/bank-cli
 ```
-
-### Building
-
-```bash
-make build      # Build executable
-make verify     # Verify Dafny code only
-make clean      # Remove all build artifacts
-```
-
-See `make help` for all available commands.
 
 ## Usage Example
 
