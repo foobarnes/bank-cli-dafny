@@ -139,6 +139,9 @@ module OverdraftPolicy {
     ensures |breakdown| > 0 <==> overdraftAmount > 0
     ensures overdraftAmount == 0 ==> breakdown == []
     ensures overdraftAmount > 0 ==> |breakdown| == 1
+    ensures overdraftAmount > 0 ==> breakdown[0].tier == GetOverdraftTier(overdraftAmount)
+    ensures overdraftAmount > 0 ==> breakdown[0].applicableAmount == overdraftAmount
+    ensures overdraftAmount > 0 ==> breakdown[0].charge == -CalculateOverdraftFee(overdraftAmount)
   {
     if overdraftAmount == 0 {
       breakdown := [];
@@ -217,6 +220,10 @@ module OverdraftPolicy {
     ensures feeTx.parentTxId.Some?
     ensures feeTx.parentTxId.value == parentTxId
     ensures feeTx.balanceAfter == currentBalance - CalculateOverdraftFee(overdraftAmount)
+    ensures feeTx.accountId == accountId
+    ensures feeTx.timestamp == timestamp
+    ensures feeTx.balanceBefore == currentBalance
+    ensures feeTx.id == parentTxId + "-FEE"
   {
     var fee := CalculateOverdraftFee(overdraftAmount);
     var breakdown := CalculateTierBreakdown(overdraftAmount);

@@ -48,27 +48,6 @@ dotnet --version
 # Expected: 8.0.x
 ```
 
-**Linux (Ubuntu/Debian):**
-```bash
-# Install .NET SDK first
-wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt-get update
-sudo apt-get install -y dotnet-sdk-8.0
-
-# Install Dafny
-dotnet tool install --global dafny
-```
-
-**Windows:**
-```powershell
-# Install .NET SDK
-winget install Microsoft.DotNet.SDK.8
-
-# Using .NET tool to install Dafny
-dotnet tool install --global dafny
-```
-
 ### Verify Installation
 ```bash
 dafny --version
@@ -522,16 +501,6 @@ See [docs/README.md](docs/README.md) for complete documentation navigation.
 
 **Platforms:**
 - macOS 11+ (Big Sur or higher)
-- Ubuntu 20.04+ / Debian 11+
-- Windows 10/11 or Windows Server 2019+
-
-**Hardware:**
-- Minimum: 2 cores, 4 GB RAM, 500 MB disk
-- Recommended: 4+ cores, 8+ GB RAM, 1 GB disk
-
-## License
-
-Educational use. Copyright 2025.
 
 ---
 

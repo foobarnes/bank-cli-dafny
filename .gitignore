@@ -113,3 +113,16 @@ bank-cli*.dll
 data/backup/
 data/*.bak
 .project-artifacts/
+
+# User data files (should not be committed)
+bank_data.json
+
+# Backup files
+*.backup.*.json
+
+# Test backup files with numbered extensions
+tests/*.bak*
+
+# Test artifacts (generated C# and build artifacts)
+tests/*.cs
+tests/.build/

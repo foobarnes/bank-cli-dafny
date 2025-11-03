@@ -365,12 +365,12 @@ module OverdraftPolicyTests {
     var amt7 := 100001;  // $1000.01 - Tier 4
 
     // Apply the lemma to verify monotonicity
-    FeeMonotonicity(amt1, amt2);
-    FeeMonotonicity(amt2, amt3);
-    FeeMonotonicity(amt3, amt4);
-    FeeMonotonicity(amt4, amt5);
-    FeeMonotonicity(amt5, amt6);
-    FeeMonotonicity(amt6, amt7);
+    OverdraftPolicy.FeeMonotonicity(amt1, amt2);
+    OverdraftPolicy.FeeMonotonicity(amt2, amt3);
+    OverdraftPolicy.FeeMonotonicity(amt3, amt4);
+    OverdraftPolicy.FeeMonotonicity(amt4, amt5);
+    OverdraftPolicy.FeeMonotonicity(amt5, amt6);
+    OverdraftPolicy.FeeMonotonicity(amt6, amt7);
 
     var fee1 := CalculateOverdraftFee(amt1);
     var fee2 := CalculateOverdraftFee(amt2);

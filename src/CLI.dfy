@@ -143,6 +143,10 @@ module CLI {
   method DisplayMainMenu()
   {
     PrintLine("");
+    PrintLine("");
+    PrintLine("");
+    PrintLine("");
+    PrintLine("");
     PrintLine("========================================");
     PrintLine("       VERIFIED BANK CLI");
     PrintLine("========================================");
