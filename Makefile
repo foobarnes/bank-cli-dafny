@@ -127,7 +127,11 @@ test: verify
 # Build and run
 run: build
 	@echo "$(CYAN)Running $(OUTPUT_NAME)...$(NC)"
-	$(EXECUTABLE)
+	@if [ -z "$$DOTNET_ROOT" ] && [ -d "/opt/homebrew/opt/dotnet/libexec" ]; then \
+		DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec" $(EXECUTABLE); \
+	else \
+		$(EXECUTABLE); \
+	fi
 
 # Run without building (assumes build exists)
 run-quick:
@@ -136,7 +140,11 @@ run-quick:
 		echo "Run 'make build' first"; \
 		exit 1; \
 	fi
-	$(EXECUTABLE)
+	@if [ -z "$$DOTNET_ROOT" ] && [ -d "/opt/homebrew/opt/dotnet/libexec" ]; then \
+		DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec" $(EXECUTABLE); \
+	else \
+		$(EXECUTABLE); \
+	fi
 
 # ============================================================================
 # PUBLISHING & DISTRIBUTION

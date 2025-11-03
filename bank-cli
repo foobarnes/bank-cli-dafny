@@ -13,7 +13,7 @@ set -e
 
 # Locate the DLL relative to script location
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DLL="$SCRIPT_DIR/.build/bin/Debug/net8.0/bank-cli.dll"
+DLL="$SCRIPT_DIR/.build/bin/Debug/net9.0/bank-cli.dll"
 
 # Check if DLL exists
 if [ ! -f "$DLL" ]; then
@@ -32,12 +32,19 @@ if ! command -v dotnet &> /dev/null; then
     echo "Error: dotnet command not found" >&2
     echo "" >&2
     echo "Please install .NET SDK:" >&2
-    echo "  brew install dotnet@8" >&2
+    echo "  brew install dotnet" >&2
     echo "" >&2
-    echo "And add to your PATH:" >&2
-    echo "  export PATH=\"/opt/homebrew/opt/dotnet@8/bin:\$PATH\"" >&2
+    echo "Or for a specific version:" >&2
+    echo "  brew install dotnet@9" >&2
     exit 1
 fi
 
-# Execute the DLL with dotnet (supports .NET >= 8.0 via RollForward)
+# Set DOTNET_ROOT if not already set (helps find runtime on macOS)
+if [ -z "$DOTNET_ROOT" ]; then
+    if [ -d "/opt/homebrew/opt/dotnet/libexec" ]; then
+        export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+    fi
+fi
+
+# Execute the DLL with dotnet (supports .NET >= 9.0 via RollForward)
 exec dotnet "$DLL" "$@"
