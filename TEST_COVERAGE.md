@@ -398,7 +398,7 @@ This document provides comprehensive coverage analysis for all implemented modul
 # Dafny 4.11.0 or higher
 dafny --version
 
-# .NET 8.0 runtime
+# .NET 9.0 runtime
 dotnet --version
 ```
 

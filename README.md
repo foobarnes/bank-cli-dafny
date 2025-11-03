@@ -31,11 +31,11 @@ A comprehensive educational project demonstrating formal verification techniques
 
 **macOS:**
 ```bash
-# Install .NET 8 via Homebrew
-brew install dotnet@8
+# Install .NET 9 via Homebrew
+brew install dotnet@9
 
 # Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
-export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+export PATH="/opt/homebrew/opt/dotnet@9/bin:$PATH"
 
 # Apply the changes
 source ~/.zshrc  # or source ~/.bash_profile
@@ -45,7 +45,7 @@ brew install dafny
 
 # Verify .NET installation
 dotnet --version
-# Expected: 8.0.x
+# Expected: 9.0.x
 ```
 
 ### Verify Installation
@@ -54,7 +54,7 @@ dafny --version
 # Expected: Dafny 4.11.0 or higher
 
 dotnet --version
-# Expected: 8.0.x or higher
+# Expected: 9.0.x or higher
 ```
 
 ## Quick Start
@@ -62,10 +62,10 @@ dotnet --version
 ### First Time Setup
 ```bash
 # Install dependencies (macOS)
-brew install dafny dotnet@8
+brew install dafny dotnet@9
 
 # Add .NET to your PATH (add to ~/.zshrc or ~/.bash_profile)
-export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
+export PATH="/opt/homebrew/opt/dotnet@9/bin:$PATH"
 
 # Build the project
 make build
@@ -87,7 +87,7 @@ make run-quick  # Run without rebuilding
 
 **Direct execution:**
 ```bash
-./.build/bin/Debug/net8.0/bank-cli
+./.build/bin/Debug/net9.0/bank-cli
 ```
 
 ### Building
@@ -496,7 +496,7 @@ See [docs/README.md](docs/README.md) for complete documentation navigation.
 
 **Software:**
 - Dafny 4.11.0+
-- .NET 8.0 runtime
+- .NET 9.0 runtime
 - Z3 theorem prover (included with Dafny)
 
 **Platforms:**

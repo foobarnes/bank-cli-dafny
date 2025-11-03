@@ -14,7 +14,7 @@ DAFNY_TESTS := tests
 CSPROJ := bank-cli.csproj
 OUTPUT_NAME := bank-cli
 CONFIG ?= Debug
-TARGET_FRAMEWORK := net8.0
+TARGET_FRAMEWORK := net9.0
 
 # Paths
 BIN_OUTPUT := $(BUILD_DIR)/bin/$(CONFIG)/$(TARGET_FRAMEWORK)

@@ -80,7 +80,7 @@ make dev        # Verify, build, and run
 make run-quick  # Run without rebuilding
 
 # Or directly
-./.build/bin/Debug/net8.0/bank-cli
+./.build/bin/Debug/net9.0/bank-cli
 ```
 
 **Run specific module verification:**
@@ -127,10 +127,10 @@ All generated files go to `.build/` (never version controlled):
 ```
 .build/
 ├── dafny/csharp/            # Generated bank-cli.cs from Dafny
-├── bin/Debug/net8.0/        # Debug executable and DLLs
-├── bin/Release/net8.0/      # Release executable and DLLs
-├── obj/Debug/net8.0/        # .NET intermediate objects
-├── obj/Release/net8.0/      # .NET intermediate objects
+├── bin/Debug/net9.0/        # Debug executable and DLLs
+├── bin/Release/net9.0/      # Release executable and DLLs
+├── obj/Debug/net9.0/        # .NET intermediate objects
+├── obj/Release/net9.0/      # .NET intermediate objects
 ├── publish/Release/         # Self-contained distribution
 ├── cache/                   # Build cache
 ├── logs/                    # Build logs
@@ -290,7 +290,7 @@ Both configured to output to `.build/`:
 
 Required tools:
 1. **Dafny** - Latest version from https://github.com/dafny-lang/dafny/releases
-2. **.NET SDK** - Version 8.0 or later from https://dotnet.microsoft.com/download
+2. **.NET SDK** - Version 9.0 or later from https://dotnet.microsoft.com/download
 3. **Make** (optional) - For using Makefile targets
 
 Verify installation:
