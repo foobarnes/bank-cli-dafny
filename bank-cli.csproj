@@ -20,6 +20,7 @@
       <Compile Include="ffi/IO.cs" />
       <Compile Include="ffi/FileStorage.cs" />
       <Compile Include="ffi/StringHelpers.cs" />
+      <Compile Include="ffi/BankSerializer.cs" />
 
       <!-- NuGet dependencies -->
       <PackageReference Include="DafnyRuntime" Version="4.9.2" />

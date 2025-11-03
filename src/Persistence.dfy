@@ -21,7 +21,10 @@
 // Simplified Persistence module - FFI boundary only
 // Full Bank integration will be in a separate PersistenceImpl module
 
+include "Bank.dfy"
+
 module Persistence {
+  import opened Bank
 
   // ============================================================================
   // RESULT TYPES FOR FILE OPERATIONS
@@ -104,6 +107,39 @@ module Persistence {
   method {:extern "FileStorage", "FileExists"} FileExists(filePath: string)
     returns (fileExists: bool)
     // Simple boolean return - no error cases
+
+  // ============================================================================
+  // BANK SERIALIZATION FFI
+  // ============================================================================
+
+  /*
+   * SerializeBank converts a Bank object to JSON string.
+   *
+   * FFI Contract:
+   * - Serializes bank state including all accounts and transactions
+   * - Returns JSON string representation
+   * - Empty string on serialization error (caller should validate)
+   *
+   * The actual implementation is in ffi/BankSerializer.cs
+   */
+  method {:extern "BankSerializer", "SerializeBank"} SerializeBank(bank: Bank)
+    returns (json: string)
+    // No postconditions - FFI boundary
+
+  /*
+   * DeserializeBank converts a JSON string to Bank object.
+   *
+   * FFI Contract:
+   * - Parses JSON and reconstructs Bank state
+   * - Returns Success(bank) on valid JSON with correct structure
+   * - Returns CorruptedData on malformed JSON or missing fields
+   * - Returns IOError on other deserialization failures
+   *
+   * The actual implementation is in ffi/BankSerializer.cs
+   */
+  method {:extern "BankSerializer", "DeserializeBank"} DeserializeBank(json: string)
+    returns (result: PersistenceResult<Bank>)
+    // No postconditions - we can't verify FFI behavior
 
   // ============================================================================
   // VALIDATED PERSISTENCE OPERATIONS

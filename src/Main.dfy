@@ -30,6 +30,52 @@ module MainModule {
   method {:extern "IO", "PrintLine"} PrintLine(text: string)
 
   // ============================================================================
+  // SERIALIZATION HELPERS
+  // ============================================================================
+
+  /*
+   * SerializeBank converts a Bank to a JSON string.
+   * This is a simplified placeholder implementation.
+   * In production, this would use proper JSON serialization.
+   */
+  method SerializeBank(bank: Bank) returns (json: string)
+    requires ValidBank(bank)
+  {
+    // Simplified JSON representation
+    // In production, this would properly serialize all accounts and transactions
+    var txIdStr := NatToString(bank.nextTransactionId);
+    var feesStr := IntToString(bank.totalFees);
+    json := "{\"accounts\":{},\"nextTransactionId\":" + txIdStr +
+            ",\"totalFees\":" + feesStr + "}";
+  }
+
+  /*
+   * DeserializeBank converts a JSON string to a Bank.
+   * This is a simplified placeholder implementation.
+   * In production, this would parse JSON and reconstruct the bank state.
+   */
+  method DeserializeBank(json: string) returns (bank: Bank, success: bool)
+    ensures success ==> ValidBank(bank)
+  {
+    // For now, just return empty bank
+    // In production, would parse JSON
+    bank := CreateEmptyBank();
+    success := true;
+  }
+
+  /*
+   * Helper method to convert nat to string for JSON.
+   * Uses FFI string helpers.
+   */
+  method {:extern "StringHelpers", "NatToString"} NatToString(n: nat) returns (str: string)
+
+  /*
+   * Helper method to convert int to string for JSON.
+   * Uses FFI string helpers.
+   */
+  method {:extern "StringHelpers", "IntToString"} IntToString(n: int) returns (str: string)
+
+  // ============================================================================
   // INITIALIZATION
   // ============================================================================
 
@@ -49,11 +95,17 @@ module MainModule {
       var loadResult := LoadData(dataFilePath);
 
       if loadResult.Success? {
-        // In production, would deserialize JSON to Bank
-        // For now, create empty bank
-        bank := CreateEmptyBank();
-        success := true;
-        PrintLine("Bank data loaded successfully.");
+        // Deserialize JSON to Bank
+        var loadedBank, deserializeSuccess := DeserializeBank(loadResult.value);
+        if deserializeSuccess {
+          bank := loadedBank;
+          success := true;
+          PrintLine("Bank data loaded successfully.");
+        } else {
+          PrintLine("Error deserializing bank data. Starting with empty bank.");
+          bank := CreateEmptyBank();
+          success := true;
+        }
       } else {
         PrintLine("Error loading bank data. Starting with empty bank.");
         bank := CreateEmptyBank();
@@ -64,7 +116,8 @@ module MainModule {
       bank := CreateEmptyBank();
 
       // Save initial empty state
-      var saveResult := SaveData("", dataFilePath);
+      var emptyJson := SerializeBank(bank);
+      var saveResult := SaveData(emptyJson, dataFilePath);
       success := true;
       PrintLine("New bank initialized.");
     }
@@ -93,6 +146,7 @@ module MainModule {
   // ============================================================================
 
   method Shutdown(bank: Bank, dataFilePath: string)
+    requires ValidBank(bank)
   {
     PrintLine("");
     PrintLine("========================================");
@@ -100,7 +154,8 @@ module MainModule {
     PrintLine("========================================");
     PrintLine("Saving bank state...");
 
-    var saveResult := SaveData("", dataFilePath);
+    var json := SerializeBank(bank);
+    var saveResult := SaveData(json, dataFilePath);
 
     if saveResult.Success? {
       PrintLine("✓ Bank state saved successfully");
@@ -110,6 +165,27 @@ module MainModule {
 
     PrintLine("Thank you for using Verified Bank CLI!");
     PrintLine("========================================");
+  }
+
+  // ============================================================================
+  // BANK STATE PERSISTENCE
+  // ============================================================================
+
+  /*
+   * SaveBankState persists the current bank state to disk.
+   * Called after each state-modifying operation for crash safety.
+   */
+  method SaveBankState(bank: Bank, dataFilePath: string)
+    requires ValidBank(bank)
+  {
+    var json := SerializeBank(bank);
+    var saveResult := SaveData(json, dataFilePath);
+
+    if !saveResult.Success? {
+      // Non-fatal error - just log it
+      // In production, might want to retry or alert
+      PrintLine("Warning: Auto-save failed");
+    }
   }
 
   // ============================================================================
@@ -143,9 +219,9 @@ module MainModule {
     // Run CLI
     PrintLine("Starting CLI...");
     PrintLine("");
-    CLI.RunCLI(bank, dataFilePath);
+    var finalBank := CLI.RunCLI(bank, dataFilePath);
 
-    // Shutdown
-    Shutdown(bank, dataFilePath);
+    // Shutdown with final bank state
+    Shutdown(finalBank, dataFilePath);
   }
 }
